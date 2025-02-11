@@ -53,10 +53,30 @@ console.log(await db.execute("show databases"));
 //   [values]
 // );
 
-// const [rows] = await db.execute(`select * from users;`);
+const [rows] = await db.execute(`select * from users;`);
 // specific user data:
-const [rows] = await db.execute(`select * from users where username="David";`);
+// const [rows] = await db.execute(`select * from users where username="David";`);
 console.log(rows);
+
+// update user:
+// try {
+//   const [rows] = await db.execute(
+//     `update users set username="DavidWarner" where email="david@email.com"`
+//   );
+//   console.log("ALL USERS-->", rows);
+// } catch (error) {
+//   console.log("err", error);
+// }
+
+// delete user:
+// try {
+//   const [rows] = await db.execute(
+//     `DELETE FROM users where email="david@email.com"`
+//   );
+//   console.log("ALL USERS-->", rows);
+// } catch (error) {
+//   console.log("err", error);
+// }
 
 const connectDB = async () => {
   try {
