@@ -34,13 +34,28 @@ console.log(await db.execute("show databases"));
 // console.log("hello");
 
 // using prepared statement (Best practice):
-await db.execute(
-  `
-    INSERT INTO users(username, email) VALUES(?,?)
-    `,
-  ["Jhole", "jhole@email.com"]
-);
-const [rows] = await db.execute(`select * from users;`);
+// await db.execute(
+//   `
+//     INSERT INTO users(username, email) VALUES(?,?)
+//     `,
+//   ["Jhole", "jhole@email.com"]
+// );
+
+// insertMany code
+// const values = [
+//     ["Alice", "alice@email.com"],
+//     ["David", "david@email.com"],
+// ]
+// await db.query(
+//   `
+//     INSERT INTO users(username, email) VALUES ?
+//     `,
+//   [values]
+// );
+
+// const [rows] = await db.execute(`select * from users;`);
+// specific user data:
+const [rows] = await db.execute(`select * from users where username="David";`);
 console.log(rows);
 
 const connectDB = async () => {
