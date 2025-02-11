@@ -67,6 +67,15 @@ console.log(rows);
 // } catch (error) {
 //   console.log("err", error);
 // }
+// update user(recomended way):
+// try {
+//   const [rows] = await db.execute(
+//     `update users set username=? where email=?`,["DavidWarner","david@email.com"]
+//   );
+//   console.log("ALL USERS-->", rows);
+// } catch (error) {
+//   console.log("err", error);
+// }
 
 // delete user:
 // try {
