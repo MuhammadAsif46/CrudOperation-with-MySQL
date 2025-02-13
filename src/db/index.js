@@ -1,12 +1,13 @@
 import { DB_NAME } from "../constant.js";
 import mysql from "mysql2/promise";
+import "dotenv/config"
 
 // 1. to connect of mysql server
 const db = await mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Admin@123",
-  database: "mysql_db",
+  host: process.env.MY_SQL_HOST,
+  user: process.env.MY_SQL_USER,
+  password: process.env.MY_SQL_PASSWORD,
+  database: process.env.MY_SQL_DATEBASE,
 });
 console.log("MySQL Connected Successfully");
 
