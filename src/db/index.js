@@ -1,105 +1,25 @@
-import { DB_NAME } from "../constant.js";
 import mysql from "mysql2/promise";
-import "dotenv/config"
+import "dotenv/config";
 
 // 1. to connect of mysql server
-const db = await mysql.createConnection({
+const mySqlDB = await mysql.createConnection({
   host: process.env.MY_SQL_HOST,
   user: process.env.MY_SQL_USER,
   password: process.env.MY_SQL_PASSWORD,
   database: process.env.MY_SQL_DATEBASE,
 });
-console.log("MySQL Connected Successfully");
+// console.log("MySQL Connected Successfully");
 
-// 2. we need to create a database
-// await db.execute("create database mysql_db")
-console.log(await db.execute("show databases"));
-
-// 3. then we create a table
-
-// await db.execute(`
-//     CREATE TABLE users(
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     username VARCHAR(100) NOT NULL,
-//     email VARCHAR(100) NOT NULL UNIQUE
-//     );
-//     `);
-// console.log("hello ");
-
-//  4. and is to perform CRUD Operation
-
-// using Inline Values (Not Recommended):
-// await db.execute(`
-//     INSERT INTO users(username, email) VALUES('John','jhon@email.com')
-//     `);
-// console.log("hello");
-
-// using prepared statement (Best practice):
-// await db.execute(
-//   `
-//     INSERT INTO users(username, email) VALUES(?,?)
-//     `,
-//   ["Jhole", "jhole@email.com"]
-// );
-
-// insertMany code
-// const values = [
-//     ["Alice", "alice@email.com"],
-//     ["David", "david@email.com"],
-// ]
-// await db.query(
-//   `
-//     INSERT INTO users(username, email) VALUES ?
-//     `,
-//   [values]
-// );
-
-const [rows] = await db.execute(`select * from users;`);
-// specific user data:
-// const [rows] = await db.execute(`select * from users where username="David";`);
-console.log(rows);
-
-// update user:
-// try {
-//   const [rows] = await db.execute(
-//     `update users set username="DavidWarner" where email="david@email.com"`
-//   );
-//   console.log("ALL USERS-->", rows);
-// } catch (error) {
-//   console.log("err", error);
-// }
-// update user(recomended way):
-// try {
-//   const [rows] = await db.execute(
-//     `update users set username=? where email=?`,["DavidWarner","david@email.com"]
-//   );
-//   console.log("ALL USERS-->", rows);
-// } catch (error) {
-//   console.log("err", error);
-// }
-
-// delete user:
-// try {
-//   const [rows] = await db.execute(
-//     `DELETE FROM users where email="david@email.com"`
-//   );
-//   console.log("ALL USERS-->", rows);
-// } catch (error) {
-//   console.log("err", error);
-// }
-
-const connectDB = async () => {
-  try {
-    const connectionInstance = await mongoose.connect(
-      `${process.env.MONGODB_URI}/${DB_NAME}`
-    );
-    console.log(
-      `\n MySQL connected !! BD HOST: ${connectionInstance.connection.host}`
-    );
-  } catch (error) {
-    console.error("MySQL Connection failed:", error);
-    process.exit(1);
-  }
+export const connectDB = async () => {
+  mySqlDB
+    .query("SELECT 1")
+    .then(() => {
+      console.log("my-sql database connected");
+    })
+    .catch((err) => {
+      console.error(err);
+      console.log("MySQL Connection failed:", err);
+    });
 };
 
-export default connectDB;
+export default mySqlDB;

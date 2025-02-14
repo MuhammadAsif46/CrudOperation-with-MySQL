@@ -10,10 +10,10 @@ import {
 const router = Router();
 
 // Secure routes:
-router.route("/getUsers").get(getAllUser);
+router.route("/users").get(getAllUser);
+router.route("/users/:userId"). get(getUserById);
 router.route("/AddUser").post(AddUser);
-router.route("/UpdateUser/:id").put(UpdateUser);
-router.route("/deleteUser/:id").delete(DeleteUser);
-router.route("/getUser/:id").get(getUserById);
+router.route("/UpdateUser/:userId").put(UpdateUser);
+router.route("/deleteUser/:userId").delete(DeleteUser);
 
 export default router;
