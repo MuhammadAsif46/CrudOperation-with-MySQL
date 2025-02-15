@@ -86,22 +86,21 @@ const createUser = async (req, res) => {
 
   try {
     const insertRes = await db.query(
-      'INSERT INTO users (username,email,created_on) VALUES(? , ? , ? )',
-      [username, email, moment(new Date()).format('YYYY-MM-DD')]
-    )
+      "INSERT INTO users (username,email,created_on) VALUES(? , ? , ? )",
+      [username, email, moment(new Date()).format("YYYY-MM-DD")]
+    );
 
     if (!insertRes) {
       res.status(404).send({
-        success:false,
+        success: false,
         message: "Something went wrong while inserting a new user",
-      })
+      });
     }
 
     res.status(200).send({
-      success:true,
+      success: true,
       message: `Post created successfully with id:${insertRes[0]?.insertId}`,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -112,31 +111,94 @@ const createUser = async (req, res) => {
   }
 };
 
-const UpdateUser = async(req, res) => {
-  const {userId} = req?.params;
+// Update User Hadndle:
+const UpdateUser = async (req, res) => {
+  const { userId } = req?.params;
+  const { username, email } = req?.body;
 
   if (!userId) {
     return res.status(404).send({
       success: false,
-      message: 'User not found',
-    })
+      message: "User not found",
+    });
   }
 
-  const {username, email} = req?.body
+  if (!username || username?.trim() === "") {
+    return res.status(400).send({
+      success: false,
+      message: "username is required",
+    });
+  }
+
+  if (!email || email?.trim() === "") {
+    return res.status(400).send({
+      success: false,
+      message: "email is required",
+    });
+  }
 
   try {
-    const updateRes = await db.query('')
+    const updateRes = await db.query(
+      "UPDATE users SET username = ?, email = ? WHERE id = ? ",
+      [username, email, userId]
+    );
 
+    if (!updateRes) {
+      return res.status(404).send({
+        success: false,
+        message: "user not found",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: `User updated successfully with id : ${userId} `,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: 'Internal server error',
-      error: error?.message
+      message: "Internal server error",
+      error: error?.message,
     });
-    
   }
 };
-const DeleteUser = (req, res) => {};
+
+// Delete User Hadndle:
+const DeleteUser = async(req, res) => {
+  const {userId} = req?.params;
+  if (!userId) {
+    return res.status(404).send({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  try {
+    const deleteRes = await db.query(
+      "DELETE FROM users WHERE id = ? ",
+      [userId]
+    );
+
+    if (!deleteRes) {
+      return res.status(404).send({
+        success: false,
+        message: "user not found",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: `User Deleted successfully with id : ${userId} `,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal server error",
+      error: error?.message,
+    });
+  }
+};
 
 export { getAllUser, createUser, UpdateUser, DeleteUser, getUserById };
