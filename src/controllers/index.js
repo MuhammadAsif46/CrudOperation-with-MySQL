@@ -1,6 +1,7 @@
+import moment from "moment";
 import db from "../db/index.js";
 
-// Get all user list:
+// Get all user list handle:
 const getAllUser = async (req, res) => {
   try {
     const users = await db.query("SELECT * FROM users");
@@ -28,7 +29,7 @@ const getAllUser = async (req, res) => {
   }
 };
 
-// Get user by id:
+// Get user by id handle:
 const getUserById = async (req, res) => {
   const { userId } = req?.params;
 
@@ -64,15 +65,78 @@ const getUserById = async (req, res) => {
     });
   }
 };
-const AddUser = (req, res) => {
-  const { firstName, lastName, email, phone } = req;
-  console.log(firstName, lastName, email, phone);
+
+// CREATE new user handle
+const createUser = async (req, res) => {
+  const { username, email } = req?.body;
+
+  if (!username || username?.trim() === "") {
+    return res.status(400).send({
+      success: false,
+      message: "username is required",
+    });
+  }
+
+  if (!email || email?.trim() === "") {
+    return res.status(400).send({
+      success: false,
+      message: "email is required",
+    });
+  }
+
+  try {
+    const insertRes = await db.query(
+      'INSERT INTO users (username,email,created_on) VALUES(? , ? , ? )',
+      [username, email, moment(new Date()).format('YYYY-MM-DD')]
+    )
+
+    if (!insertRes) {
+      res.status(404).send({
+        success:false,
+        message: "Something went wrong while inserting a new user",
+      })
+    }
+
+    res.status(200).send({
+      success:true,
+      message: `Post created successfully with id:${insertRes[0]?.insertId}`,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Internal server error",
+      error: error?.message,
+    });
+  }
 };
-const UpdateUser = (req, res) => {};
+
+const UpdateUser = async(req, res) => {
+  const {userId} = req?.params;
+
+  if (!userId) {
+    return res.status(404).send({
+      success: false,
+      message: 'User not found',
+    })
+  }
+
+  const {username, email} = req?.body
+
+  try {
+    const updateRes = await db.query('')
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: 'Internal server error',
+      error: error?.message
+    });
+    
+  }
+};
 const DeleteUser = (req, res) => {};
 
-export { getAllUser, AddUser, UpdateUser, DeleteUser, getUserById };
-
-
-
-
+export { getAllUser, createUser, UpdateUser, DeleteUser, getUserById };

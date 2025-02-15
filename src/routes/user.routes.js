@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getAllUser,
-  AddUser,
+  createUser,
   UpdateUser,
   DeleteUser,
   getUserById,
@@ -16,8 +16,8 @@ router.route("/users").get(getAllUser);
 // Get User BY Id || GET
 router.route("/users/:userId"). get(getUserById);
 
-// Add New User || POST
-router.route("/AddUser").post(AddUser);
+// CREATE User || POST
+router.route("/create").post(createUser);
 
 // Update User BY Id || PUT
 router.route("/UpdateUser/:userId").put(UpdateUser);
