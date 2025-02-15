@@ -41,7 +41,8 @@ const getUserById = async (req, res) => {
 
   try {
     const [user] = await db.query("SELECT * FROM users WHERE id=? ", [userId]);
-    
+    // destructure user array
+
     if (!user) {
       return res.status(404).send({
         success: false,
